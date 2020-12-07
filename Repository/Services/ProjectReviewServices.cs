@@ -287,12 +287,21 @@ namespace Repository.Services
 
         public JsonModel SaveProjectSchedulerWithProjectNumber(ProjectScheduleViewModel model)
         {
-            
             var projectNumber = context.ProjectNumbers.Where(p=> p.ClientId == model.clientId && p.NickName == model.NickName).FirstOrDefault();
             if (projectNumber == null) {
+                var newClientId = 0;
+                if (model.clientId == null)
+                {
+                    Models.Clients newClient = new Models.Clients();
+                    newClient.ClientName = model.ClientName;
+                    context.Entry(newClient).State = EntityState.Added;
+                    context.SaveChanges();
+                    newClientId = newClient.ClientId;
+                }
+
                 Models.ProjectNumbers newProjectNumber = new Models.ProjectNumbers();
                 newProjectNumber.ProjectNumber = model.ProjectNumber;
-                newProjectNumber.ClientId = model.clientId;
+                newProjectNumber.ClientId = model.clientId == null ? newClientId : model.clientId;
                 newProjectNumber.NickName = model.NickName;
                 newProjectNumber.ProjectManagerId = model.ProjectManagerId;
                 newProjectNumber.ProjectDeveloperId = model.ProjectDeveloperId;

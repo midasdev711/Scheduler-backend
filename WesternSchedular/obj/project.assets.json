@@ -7155,19 +7155,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tkajiyama\\.nuget\\packages\\": {}
+    "C:\\Users\\hello\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tkajiyama\\Documents\\New folder\\WesternSchedularbest\\WesternSchedular\\WesternSchedular\\WesternSchedular.csproj",
+      "projectUniqueName": "D:\\work\\Scott\\scheduleapp-backend\\WesternSchedular\\WesternSchedular.csproj",
       "projectName": "WesternSchedular",
-      "projectPath": "C:\\Users\\tkajiyama\\Documents\\New folder\\WesternSchedularbest\\WesternSchedular\\WesternSchedular\\WesternSchedular.csproj",
-      "packagesPath": "C:\\Users\\tkajiyama\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tkajiyama\\Documents\\New folder\\WesternSchedularbest\\WesternSchedular\\WesternSchedular\\obj\\",
+      "projectPath": "D:\\work\\Scott\\scheduleapp-backend\\WesternSchedular\\WesternSchedular.csproj",
+      "packagesPath": "C:\\Users\\hello\\.nuget\\packages\\",
+      "outputPath": "D:\\work\\Scott\\scheduleapp-backend\\WesternSchedular\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\tkajiyama\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hello\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7179,9 +7179,10 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\tkajiyama\\Documents\\New folder\\WesternSchedularbest\\WesternSchedular\\Repository\\Repository.csproj": {
-              "projectPath": "C:\\Users\\tkajiyama\\Documents\\New folder\\WesternSchedularbest\\WesternSchedular\\Repository\\Repository.csproj"
+            "D:\\work\\Scott\\scheduleapp-backend\\Repository\\Repository.csproj": {
+              "projectPath": "D:\\work\\Scott\\scheduleapp-backend\\Repository\\Repository.csproj"
             }
           }
         }
@@ -7194,6 +7195,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.AspNetCore.Cors": {
             "target": "Package",
@@ -7240,7 +7242,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -50,3 +50,12 @@ C:\Users\tkajiyama\Documents\New folder\WesternSchedularbest\WesternSchedular\Re
 C:\Users\tkajiyama\Documents\New folder\WesternSchedularbest\WesternSchedular\Repository\obj\Debug\netcoreapp3.1\Repository.csproj.CoreCompileInputs.cache
 C:\Users\tkajiyama\Documents\New folder\WesternSchedularbest\WesternSchedular\Repository\obj\Debug\netcoreapp3.1\Repository.dll
 C:\Users\tkajiyama\Documents\New folder\WesternSchedularbest\WesternSchedular\Repository\obj\Debug\netcoreapp3.1\Repository.pdb
+D:\work\Scott\scheduleapp-backend\Repository\bin\Debug\netcoreapp3.1\Repository.deps.json
+D:\work\Scott\scheduleapp-backend\Repository\bin\Debug\netcoreapp3.1\Repository.dll
+D:\work\Scott\scheduleapp-backend\Repository\bin\Debug\netcoreapp3.1\Repository.pdb
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.csprojAssemblyReference.cache
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.AssemblyInfoInputs.cache
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.AssemblyInfo.cs
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.csproj.CoreCompileInputs.cache
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.dll
+D:\work\Scott\scheduleapp-backend\Repository\obj\Debug\netcoreapp3.1\Repository.pdb
