@@ -619,7 +619,6 @@ namespace Repository.Services
         public JsonModel SaveProjectScheduler(ProjectScheduleViewModel model)
         {
             var clientId = model.clientId;
-            Console.WriteLine(clientId);
 
             if (clientId == 0) {
                 Models.Clients clientData = new Models.Clients();
