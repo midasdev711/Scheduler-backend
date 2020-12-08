@@ -290,6 +290,7 @@ namespace Repository.Services
             var projectNumber = context.ProjectNumbers.Where(p=> p.ClientId == model.clientId && p.NickName == model.NickName).FirstOrDefault();
             if (projectNumber == null) {
                 var newClientId = 0;
+                
                 if (model.clientId == null)
                 {
                     Models.Clients newClient = new Models.Clients();
@@ -298,6 +299,7 @@ namespace Repository.Services
                     context.SaveChanges();
                     newClientId = newClient.ClientId;
                 }
+                
 
                 Models.ProjectNumbers newProjectNumber = new Models.ProjectNumbers();
                 newProjectNumber.ProjectNumber = model.ProjectNumber;
@@ -616,9 +618,10 @@ namespace Repository.Services
 
         public JsonModel SaveProjectScheduler(ProjectScheduleViewModel model)
         {
-            var clientDataOrigin = context.Clients.Where(p => p.ClientId == model.clientId).FirstOrDefault();
             var clientId = model.clientId;
-            if (clientDataOrigin == null) {
+            Console.WriteLine(clientId);
+
+            if (clientId == 0) {
                 Models.Clients clientData = new Models.Clients();
                 clientData.ClientName = model.ClientName;
                 clientData.City = model.City;
@@ -688,7 +691,7 @@ namespace Repository.Services
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
 
-            return new JsonModel(null, "Save Successfully", (int)Repository.ViewModel.HttpStatusCode.OK, "");
+            return new JsonModel(null, "Save Successfully test", (int)Repository.ViewModel.HttpStatusCode.OK, "");
         }
 
         public JsonModel AlterRevision(RevisionInfoModel model)
