@@ -647,8 +647,8 @@ namespace Repository.Services
                 obj.ClientId = clientId;
                 obj.DateCreated = DateTime.Now;
                 obj.DateModified = DateTime.Now;
-                string TotalPNnumber = (context.ProjectNumbers.ToList().Count + 1).ToString();
-                obj.ProjectNumber = "PN0000" + TotalPNnumber;
+                //string TotalPNnumber = (context.ProjectNumbers.ToList().Count + 1).ToString();
+                obj.ProjectNumber = model.ProjectNumber;
                 context.ProjectNumbers.Add(obj);
                 context.SaveChanges();
                 foreach (var x in model.AddressDescriptors)
