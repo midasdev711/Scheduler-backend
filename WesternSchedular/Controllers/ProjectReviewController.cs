@@ -152,8 +152,6 @@ namespace WesternSchedular.Controllers
             return result;
         }
 
-        
-
         [HttpPost]
         [Route("UpdateOffDay")]
         public JsonModel UpdateOutOfDetail([FromBody] ProjectScheduleViewModel value)
@@ -162,6 +160,12 @@ namespace WesternSchedular.Controllers
             return list;
         }
 
+        [HttpGet]
+        [Route("GetInfoWithClientId")]
+        public JsonModel GetInfoWithClientId(int id)
+        {
+            return projectReviewServices.GetInfoWithClientId(id);
+        }
 
     }
 }

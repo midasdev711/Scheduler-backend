@@ -39,6 +39,7 @@ namespace Repository.Interfaces
         public JsonModel SplitProjectRevision(int projectRevisionId);
         public JsonModel DuplicateProjectRevision(int projectRevisionId);
         public JsonModel AlterRevision(RevisionInfoModel model);
+        public JsonModel GetInfoWithClientId(int id);
 
     }
 }

@@ -806,5 +806,14 @@ namespace Repository.Services
 
             return new JsonModel(objMdel, "", (int)Repository.ViewModel.HttpStatusCode.OK, "");
         }
+
+        public JsonModel GetInfoWithClientId(int id)
+        {
+            var list =
+                context.ProjectNumbers.Where
+                    (p => p.ClientId == id).
+                     ToList();
+            return new JsonModel(list, "", (int)Repository.ViewModel.HttpStatusCode.OK, "");
+        }
     }
 }
