@@ -52,6 +52,8 @@ namespace Repository.ViewModel
 
         public string ClientName { get; set; }
 
+        public string AddressLine1 { get; set; }
+
     }
     public class ViewModelProjectManagers
     {

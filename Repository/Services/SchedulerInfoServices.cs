@@ -29,7 +29,7 @@ namespace Repository.Services
             var projectDeveloper = context.ProjectDevelopers.Select(p=> new { p.ProjectDeveloperId, p.ProjectDeveloperName }).ToList();
 
 
-            var clients = context.Clients.Select(p=>new ViewModelClient{ClientId=p.ClientId, ClientName=p.ClientName}).ToList();
+            var clients = context.Clients.Select(p=>new ViewModelClient{ClientId=p.ClientId, ClientName=p.ClientName, AddressLine1=p.AddressLine1 }).ToList();
 
             //var projectDeveloprLocationsdata = (from ep in context.XProjectDeveloperLocations
             //                                join p in context.Locations on ep.LocationId equals p.LocationId
