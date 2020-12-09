@@ -737,6 +737,8 @@ namespace Repository.Services
                      Include(p=>p.Project.ProjectNumber).
                      Include(p=>p.Project.ProjectNumber.Client).
                      Include(p=>p.Project.ProjectNumber.Location).
+                     Include(p => p.ProjectManager).
+                     Include(p => p.ProjectDeveloper).
                      ToList();
 
             foreach(var x in projectlist) {
@@ -751,6 +753,8 @@ namespace Repository.Services
                     obj.StyleColor = x.Project.ProjectNumber.Location.Style_Color;
                     obj.AddressLine1 = x.Project.ProjectNumber.AddressLine1;
                     obj.AddressLine2 = x.Project.ProjectNumber.AddressLine2;
+                    obj.ProjectManagerName = x.ProjectManager.ProjectManagerName;
+                    obj.ProjectDeveloperName = x.ProjectDeveloper.ProjectDeveloperName;
                 }
                 obj.DepartmentId = x.Project.DepartmentId;
                 obj.EmployeeId = x.Project.EmployeeId;

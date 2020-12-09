@@ -37,5 +37,9 @@ namespace Repository.ViewModel
         public string ProjectType { get; set; }
 
         public int ? DepartmentId { get; set; }
+
+        public string? ProjectManagerName { get; set; }
+
+        public string? ProjectDeveloperName { get; set; }
     }
 }
