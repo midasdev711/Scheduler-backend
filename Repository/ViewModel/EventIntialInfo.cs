@@ -18,6 +18,12 @@ namespace Repository.ViewModel
 
         public string StyleClosedColor { get; set; }
 
+        public string ActiveStyle { get; set; }
+
+        public string PendingStyle { get; set; }
+
+        public string ClosedStyle { get; set; }
+
         public string AddressLine1 { get; set; }
 
         public string AddressLine2 { get; set; }

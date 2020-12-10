@@ -18,6 +18,10 @@ namespace Repository.Models
         public string Style_Border { get; set; }
         public string Style_Color { get; set; }
         public string Style_ClosedColor { get; set; }
+        public string ActiveStyle { get; set; }
+        public string PendingStyle { get; set; }
+        public string ClosedStyle { get; set; }
+
         public virtual ICollection<ProjectNumbers> ProjectNumbers { get; set; }
         public virtual ICollection<XProjectDeveloperLocations> XProjectDeveloperLocations { get; set; }
         public virtual ICollection<XProjectManagerLocations> XProjectManagerLocations { get; set; }
