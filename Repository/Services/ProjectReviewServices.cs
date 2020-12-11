@@ -145,8 +145,8 @@ namespace Repository.Services
             context.Entry(objData).State = EntityState.Modified;
             context.SaveChanges();
             var objrevison = context.ProjectRevisions.Where(p => p.ProjectRevisionId == model.ProjectRevisionId).FirstOrDefault();
-            objrevison.StartDate = model.StartDate;
-            objrevison.EndDate = model.EndDate;
+            objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
+            objrevison.EndDate = model.EndDate.AddMinutes(model.TimezoneOffset);
             objrevison.AllDay = model.Allday;
             context.Entry(objrevison).State = EntityState.Modified;
             context.SaveChanges();
@@ -156,8 +156,6 @@ namespace Repository.Services
         }
         public JsonModel SaveProjectSchedularOffDay(ProjectScheduleViewModel model)
         {
-
-
             // var objData = context.Projects.Where(p => p.ProjectId == model.ProjectId).FirstOrDefault();
             var objData = new Projects();
             objData.Status = model.Status;
@@ -174,8 +172,8 @@ namespace Repository.Services
             objrevison.ProjectId = objData.ProjectId;
             //objrevison.ProjectRevisionId = 1;
             objrevison.RevisionNumber = 0;
-            objrevison.StartDate = model.StartDate;
-            objrevison.EndDate = model.EndDate;
+            objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
+            objrevison.EndDate = model.EndDate.AddMinutes(model.TimezoneOffset);
             objrevison.AllDay = model.Allday;
             // context.Entry(objrevison).State = EntityState.Modified;
             context.ProjectRevisions.Add(objrevison);
