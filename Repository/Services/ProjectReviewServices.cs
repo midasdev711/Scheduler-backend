@@ -273,6 +273,37 @@ namespace Repository.Services
             objData.ProjectNumberId = projectNumber.ProjectNumberId;
             context.Entry(objData).State = EntityState.Modified;
             context.SaveChanges();
+
+
+            // End date calculation
+            DateTime EndDateTime = model.StartDate;
+            TimeSpan sp = new TimeSpan(17, 0, 0);
+            EndDateTime = EndDateTime.Date + sp;
+            EndDateTime = EndDateTime.AddMinutes(model.TimezoneOffset);
+            double availableHours = (EndDateTime - model.StartDate).TotalHours;
+            if (availableHours >= model.ProjectHours)
+            {
+                EndDateTime = model.StartDate.AddHours(model.ProjectHours);
+            }
+            else
+            {
+                double totalHours = model.ProjectHours;
+                DateTime newStartDate = model.StartDate;
+                EndDateTime = newStartDate;
+                do
+                {
+                    EndDateTime = EndDateTime.AddHours(availableHours);
+                    totalHours -= availableHours;
+                    if (totalHours > 0)
+                    {
+                        EndDateTime = EndDateTime.AddHours(16);
+                    }
+                    availableHours = totalHours <= 8 ? totalHours : 8;
+                }
+                while (totalHours > 0);
+            }
+
+
             var objrevison = context.ProjectRevisions.Where(p => p.ProjectRevisionId == model.ProjectRevisionId).FirstOrDefault();
             //    //Models.ProjectRevisions objrevison = new Models.ProjectRevisions();
             objrevison.ProjectManagerId = model.ProjectManagerId;
@@ -280,8 +311,9 @@ namespace Repository.Services
             objrevison.ProjectId = objData.ProjectId;
             objrevison.Hours = model.ProjectHours;
             //objrevison.ProjectRevisionId = 1;
+            objrevison.RevisionNumber = model.NumberOfRevision;
             objrevison.StartDate = model.StartDate;
-            objrevison.EndDate = model.EndDate;
+            objrevison.EndDate = EndDateTime;
             context.Entry(objrevison).State = EntityState.Modified;
             context.SaveChanges();
             //    //context.ProjectRevisions.Add(objrevison);
@@ -347,6 +379,34 @@ namespace Repository.Services
             context.Entry(pro).State = EntityState.Added;
             context.SaveChanges();
 
+            // End date calculation
+            DateTime EndDateTime = model.StartDate;
+            TimeSpan sp = new TimeSpan(17, 0, 0);
+            EndDateTime = EndDateTime.Date + sp;
+            EndDateTime = EndDateTime.AddMinutes(model.TimezoneOffset);
+            double availableHours = (EndDateTime - model.StartDate).TotalHours;
+            if (availableHours >= model.ProjectHours)
+            {
+                EndDateTime = model.StartDate.AddHours(model.ProjectHours);
+            }
+            else
+            {
+                double totalHours = model.ProjectHours;
+                DateTime newStartDate = model.StartDate;
+                EndDateTime = newStartDate;
+                do
+                {
+                    EndDateTime = EndDateTime.AddHours(availableHours);
+                    totalHours -= availableHours;
+                    if (totalHours > 0)
+                    {
+                        EndDateTime = EndDateTime.AddHours(16);
+                    }
+                    availableHours = totalHours <= 8 ? totalHours : 8;
+                }
+                while (totalHours > 0);
+            }
+
             Models.ProjectRevisions objrevison = new Models.ProjectRevisions();
             objrevison.ProjectManagerId = model.ProjectManagerId;
             objrevison.ProjectDeveloperId = model.ProjectDeveloperId;
@@ -354,8 +414,8 @@ namespace Repository.Services
             objrevison.Hours = model.ProjectHours;
             //objrevison.ProjectRevisionId = 1;
             objrevison.RevisionNumber = model.NumberOfRevision;
-            objrevison.StartDate = model.StartDate;
-            objrevison.EndDate = model.EndDate;
+            objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
+            objrevison.EndDate = EndDateTime;
             // context.Entry(objrevison).State = EntityState.Modified;
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
@@ -685,14 +745,42 @@ namespace Repository.Services
             context.Projects.Add(objData);
             context.SaveChanges();
 
+            // End date calculation
+            DateTime EndDateTime = model.StartDate;
+            TimeSpan sp = new TimeSpan(17, 0, 0);
+            EndDateTime = EndDateTime.Date + sp;
+            EndDateTime = EndDateTime.AddMinutes(model.TimezoneOffset);
+            double availableHours = (EndDateTime - model.StartDate.AddMinutes(model.TimezoneOffset)).TotalHours;
+            if (availableHours >= model.ProjectHours)
+            {
+                EndDateTime = model.StartDate.AddMinutes(model.TimezoneOffset).AddHours(model.ProjectHours);
+            }
+            else
+            {
+                double totalHours = model.ProjectHours;
+                DateTime newStartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
+                EndDateTime = newStartDate;
+                do
+                {
+                    EndDateTime = EndDateTime.AddHours(availableHours);
+                    totalHours -= availableHours;
+                    if (totalHours > 0)
+                    {
+                        EndDateTime = EndDateTime.AddHours(16);
+                    }
+                    availableHours = totalHours <= 8 ? totalHours : 8;
+                }
+                while (totalHours > 0);
+            }
+
             Models.ProjectRevisions objrevison = new Models.ProjectRevisions();
             objrevison.ProjectManagerId = projectNumberOrigin.ProjectManagerId;
             objrevison.ProjectDeveloperId = model.ProjectDeveloperId;
             objrevison.ProjectId = objData.ProjectId;
             objrevison.Hours = model.ProjectHours;
             objrevison.RevisionNumber = model.NumberOfRevision;
-            objrevison.StartDate = model.StartDate;
-            objrevison.EndDate = model.EndDate;
+            objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
+            objrevison.EndDate = EndDateTime;
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
 
@@ -729,15 +817,15 @@ namespace Repository.Services
             return new JsonModel(projectlist, "", (int)Repository.ViewModel.HttpStatusCode.OK, "");
         }
 
-        public JsonModel GetEventsByFilter(DateTime? startdDate, DateTime? endDate, int departmentId)
+        public JsonModel GetEventsByFilter(DateTime? startdDate, DateTime? endDate, int departmentId, int timezoneOffset)
         {
 
             List<EventIntialInfo> objMdel = new List<EventIntialInfo>();
 
             var projectlist = 
                 context.ProjectRevisions.Where
-                    (p => p.StartDate.Value.Date >= startdDate && 
-                     p.EndDate.Value.Date <= endDate && 
+                    (p => p.StartDate.Value.Date <= endDate && 
+                     p.EndDate.Value.Date >= startdDate && 
                      p.Project.DepartmentId == departmentId).
                      Include(p=>p.Project).
                      Include(p=>p.Project.ProjectNumber).

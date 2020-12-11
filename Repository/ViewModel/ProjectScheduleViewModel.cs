@@ -55,6 +55,9 @@ namespace Repository.ViewModel
    
     public List<ProjectNumbers> projectNumbers { get; set; }
 
+    public int TimezoneOffset { get; set; }
 
     }
+
+    
 }

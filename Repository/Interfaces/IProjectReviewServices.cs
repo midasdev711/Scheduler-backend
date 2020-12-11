@@ -23,7 +23,7 @@ namespace Repository.Interfaces
 
         public JsonModel DeleteProjectSchedulerWithProjectNumber(int id);
     
-        public JsonModel GetEventsByFilter(DateTime? startDate, DateTime? endDate, int departmentId);
+        public JsonModel GetEventsByFilter(DateTime? startDate, DateTime? endDate, int departmentId, int timezoneOffset);
 
         public JsonModel GetEventsByDepartment(int departmentId);
 

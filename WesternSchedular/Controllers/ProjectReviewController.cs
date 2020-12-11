@@ -62,9 +62,9 @@ namespace WesternSchedular.Controllers
 
         [HttpGet]
         [Route("GetEvents")]
-        public JsonModel GetEvents(DateTime ? startDate, DateTime ? endDate, int departmentId)
+        public JsonModel GetEvents(DateTime ? startDate, DateTime ? endDate, int departmentId, int timezoneOffset)
         {
-            var list = projectReviewServices.GetEventsByFilter(startDate, endDate,departmentId);
+            var list = projectReviewServices.GetEventsByFilter(startDate, endDate, departmentId, timezoneOffset);
             return list;
         }
 
