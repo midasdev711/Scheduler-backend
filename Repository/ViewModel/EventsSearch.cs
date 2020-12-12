@@ -70,6 +70,7 @@ namespace Repository.ViewModel
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int ResourceId { get; set; }
+        public int TimezoneOffset { get; set; }
 
     }
 }

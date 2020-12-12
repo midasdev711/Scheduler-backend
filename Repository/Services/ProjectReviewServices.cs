@@ -577,14 +577,14 @@ namespace Repository.Services
                 var splitHours = (double)projectRevisionDetails.Hours / 2;
                 projectRevisionDetails.EndDate = projectRevisionDetails.StartDate.Value.AddHours(splitHours);
                 projectRevisionDetails.DateModified = DateTime.Now;
-                projectRevisionDetails.Hours =(decimal) splitHours;
+                projectRevisionDetails.Hours = splitHours;
                 context.Entry(projectRevisionDetails).State = EntityState.Modified;
                 ProjectRevisions obj = new ProjectRevisions();
                 obj.ProjectId = newProject.ProjectId;
                 obj.RevisionNumber = projectRevisionDetails.RevisionNumber;
                 obj.StartDate = projectRevisionDetails.EndDate;
                 obj.EndDate = projectRevisionDetails.EndDate.Value.AddHours(splitHours);
-                obj.Hours = (decimal)splitHours;
+                obj.Hours = splitHours;
                 obj.AllDay = false;
                 obj.ProjectManagerId = projectRevisionDetails.ProjectManagerId;
                 obj.ProjectDeveloperId = projectRevisionDetails.ProjectDeveloperId;
@@ -797,11 +797,96 @@ namespace Repository.Services
                 context.Entry(projectDetail).State = EntityState.Modified;
                 context.SaveChanges();
             }
+            
+
+            // get exact hours from startdate and enddate
+
+            DateTime startHour = model.StartDate;
+            TimeSpan ts = new TimeSpan(9, 0, 0);
+            startHour = startHour.Date + ts;
+            startHour = startHour.AddMinutes(model.TimezoneOffset);
+
+            DateTime endHour = model.StartDate;
+            ts = new TimeSpan(17, 0, 0);
+            endHour = endHour.Date + ts;
+            endHour = endHour.AddMinutes(model.TimezoneOffset);
+
+            double projectHours = 0.0;
+            double endlimit_start = (endHour - model.StartDate.AddMinutes(model.TimezoneOffset)).TotalHours;
+            double start_startlimit = (model.StartDate.AddMinutes(model.TimezoneOffset) - startHour).TotalHours;
+            DateTime newStart = endlimit_start >= 0 ? (start_startlimit >= 0 ? model.StartDate.AddMinutes(model.TimezoneOffset) : startHour) : startHour.AddDays(1);
+
+            DateTime tmpStart = model.StartDate.AddMinutes(model.TimezoneOffset);
+            DateTime tmpEnd = model.EndDate.AddMinutes(model.TimezoneOffset);
+
+            do
+            {
+                endlimit_start = (endHour - tmpStart).TotalHours;
+                start_startlimit = (tmpStart - startHour).TotalHours;
+                double endlimit_end = (endHour - tmpEnd).TotalHours;
+                if (endlimit_start >= 0)
+                {
+                    if (start_startlimit >= 0)
+                    {
+                        if (endlimit_end > 0)
+                        {
+                            projectHours += (tmpEnd - tmpStart).TotalHours;
+                        } 
+                        else
+                        {
+                            projectHours += endlimit_start;
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (endlimit_end > 0)
+                        {
+                            projectHours += (tmpEnd - startHour).TotalHours;
+                        } 
+                        else
+                        {
+                            projectHours += 8;
+                        }
+                    }
+                }
+                startHour = startHour.AddDays(1);
+                endHour = endHour.AddDays(1);
+                tmpStart = startHour;
+            }
+            while (tmpEnd > tmpStart);
+
+            DateTime EndDateTime = newStart;
+            TimeSpan sp = new TimeSpan(17, 0, 0);
+            EndDateTime = EndDateTime.Date + sp;
+            EndDateTime = EndDateTime.AddMinutes(model.TimezoneOffset);
+            double availableHours = (EndDateTime - newStart).TotalHours;
+            if (availableHours >= projectHours)
+            {
+                EndDateTime = newStart.AddHours(projectHours);
+            }
+            else
+            {
+                double totalHours = projectHours;
+                DateTime newStartDate = newStart;
+                EndDateTime = newStartDate;
+                do
+                {
+                    EndDateTime = EndDateTime.AddHours(availableHours);
+                    totalHours -= availableHours;
+                    if (totalHours > 0)
+                    {
+                        EndDateTime = EndDateTime.AddHours(16);
+                    }
+                    availableHours = totalHours <= 8 ? totalHours : 8;
+                }
+                while (totalHours > 0);
+            }
+
+            projectRevisionDetails.Hours = projectHours;
             //Update startdate, endDate, hours
-            projectRevisionDetails.StartDate = model.StartDate;
-            projectRevisionDetails.EndDate = model.EndDate;
-            var Hours = (double)(model.EndDate - model.StartDate).Hours;
-            projectRevisionDetails.Hours = (decimal)Hours;
+            projectRevisionDetails.StartDate = newStart;
+            projectRevisionDetails.EndDate = EndDateTime;
             projectRevisionDetails.DateModified = DateTime.Now;
             context.Entry(projectRevisionDetails).State = EntityState.Modified;
             context.SaveChanges();
