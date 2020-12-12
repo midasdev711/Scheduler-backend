@@ -922,19 +922,19 @@ namespace Repository.Services
                 EventIntialInfo obj = new EventIntialInfo();
                 if (x.Project.ProjectNumber != null)
                 {
-                    obj.ClientName = x.Project.ProjectNumber.Client.ClientName;
-                    obj.LocationName = x.Project.ProjectNumber.Location.LocationName;
-                    obj.StyleBackGroundColor = x.Project.ProjectNumber.Location.Style_BackgroundColor;
-                    obj.StyleBorder = x.Project.ProjectNumber.Location.Style_Border;
-                    obj.StyleClosedColor = x.Project.ProjectNumber.Location.Style_ClosedColor;
-                    obj.StyleColor = x.Project.ProjectNumber.Location.Style_Color;
-                    obj.ActiveStyle = x.Project.ProjectNumber.Location.ActiveStyle;
-                    obj.PendingStyle = x.Project.ProjectNumber.Location.PendingStyle;
-                    obj.ClosedStyle = x.Project.ProjectNumber.Location.ClosedStyle;
+                    obj.ClientName = x.Project.ProjectNumber.Client != null ? x.Project.ProjectNumber.Client.ClientName : "";
+                    obj.LocationName = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.LocationName : "";
+                    obj.StyleBackGroundColor = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.Style_BackgroundColor : "";
+                    obj.StyleBorder = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.Style_Border : "";
+                    obj.StyleClosedColor = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.Style_ClosedColor : "";
+                    obj.StyleColor = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.Style_Color : "";
+                    obj.ActiveStyle = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.ActiveStyle : "";
+                    obj.PendingStyle = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.PendingStyle : "";
+                    obj.ClosedStyle = x.Project.ProjectNumber.Location != null ? x.Project.ProjectNumber.Location.ClosedStyle : "";
                     obj.AddressLine1 = x.Project.ProjectNumber.AddressLine1;
                     obj.AddressLine2 = x.Project.ProjectNumber.AddressLine2;
-                    obj.ProjectManagerName = x.ProjectManager.ProjectManagerName;
-                    obj.ProjectDeveloperName = x.ProjectDeveloper.ProjectDeveloperName;
+                    obj.ProjectManagerName = x.ProjectManager != null ? x.ProjectManager.ProjectManagerName : "";
+                    obj.ProjectDeveloperName = x.ProjectDeveloper != null ? x.ProjectDeveloper.ProjectDeveloperName : "";
                 }
                 obj.DepartmentId = x.Project.DepartmentId;
                 obj.EmployeeId = x.Project.EmployeeId;
