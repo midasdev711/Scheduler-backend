@@ -45,7 +45,7 @@ namespace Repository.ViewModel
      public int ProjectRevisionId { get; set; }
     public List<AddressDescriptors> AddressDescriptors { get; set; }
 
-    public int ProjectHours { get; set; }
+    public double ProjectHours { get; set; }
 
     public short NumberOfRevision { get; set; }
 
