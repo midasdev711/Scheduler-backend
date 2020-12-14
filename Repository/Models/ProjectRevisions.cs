@@ -10,6 +10,7 @@ namespace Repository.Models
         public short RevisionNumber { get; set; }
         public int? ProjectManagerId { get; set; }
         public int? ProjectDeveloperId { get; set; }
+        public int? EmployeeId { get; set; }
         public double? Hours { get; set; }
         public DateTime? DateCreated { get; set; }
         public string CreatedBy { get; set; }

@@ -699,11 +699,11 @@ namespace Repository.Services
             }
             
             var projectNumberOrigin = context.ProjectNumbers.Where(p => p.ProjectNumberId == model.ProjectId).FirstOrDefault();
-            if (projectNumberOrigin == null) {
 
+            if (projectNumberOrigin == null) {
                 Models.ProjectNumbers obj = new Models.ProjectNumbers();
-                obj.ProjectManagerId = model.ProjectManagerId;
-                obj.ProjectDeveloperId = model.ProjectDeveloperId;
+                obj.ProjectManagerId = model.ProjectManagerId == -1?1:model.ProjectManagerId;
+                obj.ProjectDeveloperId = model.ProjectDeveloperId == -1?1:model.ProjectDeveloperId;
                 obj.NickName = model.NickName;
                 obj.LocationId = model.LocationId;
                 obj.AddressLine1 = model.Address1;
@@ -772,8 +772,8 @@ namespace Repository.Services
             }
 
             Models.ProjectRevisions objrevison = new Models.ProjectRevisions();
-            objrevison.ProjectManagerId = projectNumberOrigin.ProjectManagerId;
-            objrevison.ProjectDeveloperId = model.ProjectDeveloperId;
+            objrevison.ProjectManagerId = projectNumberOrigin.ProjectManagerId==-1?1:projectNumberOrigin.ProjectManagerId;
+            objrevison.ProjectDeveloperId = model.ProjectDeveloperId==-1?1:model.ProjectDeveloperId;
             objrevison.ProjectId = objData.ProjectId;
             objrevison.Hours = model.ProjectHours;
             objrevison.RevisionNumber = model.NumberOfRevision;
@@ -937,7 +937,7 @@ namespace Repository.Services
                     obj.ProjectDeveloperName = x.ProjectDeveloper != null ? x.ProjectDeveloper.ProjectDeveloperName : "";
                 }
                 obj.DepartmentId = x.Project.DepartmentId;
-                obj.EmployeeId = x.Project.EmployeeId;
+                obj.EmployeeId = x.EmployeeId;
                 obj.EndDate = x.EndDate;
                 obj.StartDate = x.StartDate;
                 obj.Status = x.Project.Status;
