@@ -7,7 +7,7 @@ namespace Repository.Models
     {
         public Employees()
         {
-            Projects = new HashSet<Projects>();
+            ProjectRevisions = new HashSet<ProjectRevisions>();
             Events = new HashSet<Events>();
         }
 
@@ -18,7 +18,7 @@ namespace Repository.Models
         public int? DepartmentId { get; set; }
 
         public virtual Departments Department { get; set; }
-        public virtual ICollection<Projects> Projects { get; set; }
+        public virtual ICollection<ProjectRevisions> ProjectRevisions { get; set; }
 
         public virtual ICollection<Events> Events { get; set; }
     }

@@ -73,7 +73,7 @@ namespace Repository.Services
             objData.ProjectType = model.ProjectType;
             objData.DateModified = DateTime.Now;
             objData.DateCreated = DateTime.Now;
-            objData.EmployeeId = model.ResourceId;
+            //objData.EmployeeId = model.ResourceId;
             objData.ProjectNumberId = obj.ProjectNumberId;
             context.Projects.Add(objData);
 
@@ -82,6 +82,7 @@ namespace Repository.Services
             objrevison.ProjectDeveloperId = model.ProjectDeveloperId;
             objrevison.ProjectId = objData.ProjectId;
             objrevison.Hours = model.ProjectHours;
+            objrevison.EmployeeId = model.ResourceId;
             objrevison.ProjectRevisionId = 1;
             context.ProjectRevisions.Add(objrevison);
 

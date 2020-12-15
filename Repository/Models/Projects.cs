@@ -12,7 +12,7 @@ namespace Repository.Models
 
         public int ProjectId { get; set; }
         public int? ProjectNumberId { get; set; }
-        public int EmployeeId { get; set; }
+        // public int EmployeeId { get; set; }
         public string Status { get; set; }
         public string ProjectType { get; set; }
         public int? DepartmentId { get; set; }
@@ -22,7 +22,7 @@ namespace Repository.Models
         public DateTime? DateModified { get; set; }
         public string ModifiedBy { get; set; }
 
-        public virtual Employees Employee { get; set; }
+        // public virtual Employees Employee { get; set; }
         public virtual ProjectNumbers ProjectNumber { get; set; }
         public virtual ICollection<ProjectRevisions> ProjectRevisions { get; set; }
     }

@@ -20,6 +20,7 @@ namespace Repository.Models
         public DateTime ? EndDate { get; set; }
         public  bool ? AllDay { get; set; }
         public virtual Projects Project { get; set; }
+        public virtual Employees Employee { get; set; }
         public virtual ProjectDevelopers ProjectDeveloper { get; set; }
         public virtual ProjectManagers ProjectManager { get; set; }
     }

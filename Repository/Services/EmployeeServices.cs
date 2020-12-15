@@ -30,16 +30,16 @@ namespace Repository.Services
             //          join abc in _context.Projects pj on e.
             //          )
 
-            var list = (from emp in _context.Employees
+            /*var list = (from emp in _context.Employees
                         join proj in _context.Projects on emp.EmployeeId equals proj.EmployeeId
                         join projNumber in _context.ProjectNumbers on proj.ProjectNumberId equals projNumber.ProjectNumberId
                         join client in _context.Clients on projNumber.ClientId equals client.ClientId
                         where client.ClientName == name
                         select emp
-                        );
+                        );*/
 
            //var employeeId=   _context.Employees.FirstOrDefault(p =>p.);
-            return new JsonModel(list, "", (int)HttpStatusCode.OK, "");
+            return new JsonModel("", "", (int)HttpStatusCode.OK, "");
 
         }
 
