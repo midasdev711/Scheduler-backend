@@ -21,8 +21,8 @@ namespace Repository.Models
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-        public int ProjectManagerId { get; set; }
-        public int ProjectDeveloperId { get; set; }
+        public int? ProjectManagerId { get; set; }
+        public int? ProjectDeveloperId { get; set; }
         public DateTime? DateCreated { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? DateModified { get; set; }

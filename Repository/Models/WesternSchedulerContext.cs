@@ -321,6 +321,7 @@ namespace Repository.Models
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.DateModified).HasColumnType("datetime");
+                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
                 entity.Property(e => e.Hours).HasColumnType("numeric(10, 2)");
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
@@ -353,6 +354,12 @@ namespace Repository.Models
                     .WithMany(p => p.ProjectRevisions)
                     .HasForeignKey(d => d.ProjectManagerId)
                     .HasConstraintName("FK_ProjectRevisions_ProjectManagers");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.ProjectRevisions)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectRevisions_Employees");
             });
 
             modelBuilder.Entity<Projects>(entity =>
@@ -371,7 +378,7 @@ namespace Repository.Models
 
                 entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
-                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+                // entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
              
                 entity.Property(e => e.ModifiedBy)
@@ -394,11 +401,11 @@ namespace Repository.Models
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Employee)
+               /* entity.HasOne(d => d.Employee)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Projects_Employees");
+                    .HasConstraintName("FK_Projects_Employees");*/
 
                 entity.HasOne(d => d.ProjectNumber)
                     .WithMany(p => p.Projects)

@@ -23,7 +23,7 @@ namespace Repository.Services
 
         public Projects GetProjectById(int id)
         {
-            return _context.Projects.Where(p => p.EmployeeId == id).Include("Employee").Include("ProjectNumber").Include("ProjectRevisions").FirstOrDefault();
+            return _context.Projects.Where(p => p.DepartmentId == id).Include("Employee").Include("ProjectNumber").Include("ProjectRevisions").FirstOrDefault();
         }
 
        public  Projects SaveProject(Projects model)
