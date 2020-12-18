@@ -175,6 +175,8 @@ namespace Repository.Services
             objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
             objrevison.EndDate = model.EndDate.AddMinutes(model.TimezoneOffset);
             objrevison.AllDay = model.Allday;
+            objrevison.DateModified = DateTime.Now;
+            objrevison.DateCreated = DateTime.Now;
             // context.Entry(objrevison).State = EntityState.Modified;
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
@@ -316,6 +318,7 @@ namespace Repository.Services
             objrevison.EmployeeId = model.ResourceId;
             objrevison.StartDate = model.StartDate;
             objrevison.EndDate = EndDateTime;
+            objrevison.DateModified = DateTime.Now;
             context.Entry(objrevison).State = EntityState.Modified;
             context.SaveChanges();
             //    //context.ProjectRevisions.Add(objrevison);
@@ -328,7 +331,7 @@ namespace Repository.Services
         public JsonModel SaveProjectSchedulerWithProjectNumber(ProjectScheduleViewModel model)
         {
             var projectNumber = context.ProjectNumbers.Where(p=> p.ClientId == model.clientId && p.NickName == model.NickName).FirstOrDefault();
-            if (projectNumber == null) {
+            /*if (projectNumber == null) {
                 var newClientId = 0;
                 
                 if (model.clientId == null)
@@ -406,18 +409,20 @@ namespace Repository.Services
                     availableHours = totalHours <= 8 ? totalHours : 8;
                 }
                 while (totalHours > 0);
-            }
+            }*/
 
             Models.ProjectRevisions objrevison = new Models.ProjectRevisions();
             objrevison.ProjectManagerId = model.ProjectManagerId;
             objrevison.ProjectDeveloperId = model.ProjectDeveloperId;
-            objrevison.ProjectId = pro.ProjectId;
+            objrevison.ProjectId = model.ProjectId;
             objrevison.Hours = model.ProjectHours;
             //objrevison.ProjectRevisionId = 1;
             objrevison.RevisionNumber = model.NumberOfRevision;
             objrevison.EmployeeId = model.ResourceId;
             objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
-            objrevison.EndDate = EndDateTime;
+            objrevison.EndDate = model.EndDate.AddMinutes(model.TimezoneOffset);
+            objrevison.DateCreated = DateTime.Now;
+            objrevison.DateModified = DateTime.Now;
             // context.Entry(objrevison).State = EntityState.Modified;
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
@@ -528,7 +533,7 @@ namespace Repository.Services
             objData.Status = model.Status;
             objData.ProjectType = model.ProjectType;
             objData.DateModified = DateTime.Now;
-            objData.DateCreated = DateTime.Now;
+            //objData.DateCreated = DateTime.Now;
             objData.DepartmentId = model.Departmentid;
             objData.ProjectNumberId = projectNumber.ProjectNumberId;
             context.Entry(objData).State = EntityState.Modified;
@@ -544,6 +549,7 @@ namespace Repository.Services
             objrevison.EmployeeId = model.ResourceId;
             objrevison.StartDate = model.StartDate;
             objrevison.EndDate = model.EndDate;
+            objrevison.DateModified = DateTime.Now;
             context.Entry(objrevison).State = EntityState.Modified;
             //context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
@@ -556,6 +562,9 @@ namespace Repository.Services
         {
             var projectRevisionDetails = context.ProjectRevisions.Where(p => p.ProjectRevisionId == revisionId).FirstOrDefault();
             var list = context.Projects.Where(p => p.ProjectId == projectRevisionDetails.ProjectId).FirstOrDefault();
+
+            if (projectRevisionDetails.Hours < 2)
+                return new JsonModel(null, "Save Successfully", (int)Repository.ViewModel.HttpStatusCode.OK, "");
 
             Models.Projects newProject = new Models.Projects();
             newProject.CreatedBy = list.CreatedBy;
@@ -577,8 +586,12 @@ namespace Repository.Services
 
             if (list.ProjectType == "ClientProject")
             {
-                var splitHours = (double)projectRevisionDetails.Hours / 2;
-                projectRevisionDetails.EndDate = projectRevisionDetails.StartDate.Value.AddHours(splitHours);
+                //var splitHours = projectRevisionDetails.Hours / 2;
+                var splitHours = projectRevisionDetails.Hours / 2;
+                if(projectRevisionDetails.Hours % 2 == 1) 
+                    splitHours = (int)projectRevisionDetails.Hours / 2 + 1;
+                var splitHours1 = projectRevisionDetails.Hours - splitHours;
+                projectRevisionDetails.EndDate = projectRevisionDetails.StartDate.Value.AddHours((double)splitHours);
                 projectRevisionDetails.DateModified = DateTime.Now;
                 projectRevisionDetails.Hours = splitHours;
                 context.Entry(projectRevisionDetails).State = EntityState.Modified;
@@ -586,9 +599,9 @@ namespace Repository.Services
                 obj.ProjectId = newProject.ProjectId;
                 obj.RevisionNumber = projectRevisionDetails.RevisionNumber;
                 obj.StartDate = projectRevisionDetails.EndDate;
-                obj.EndDate = projectRevisionDetails.EndDate.Value.AddHours(splitHours);
+                obj.EndDate = projectRevisionDetails.EndDate.Value.AddHours((double)splitHours1);
                 obj.EmployeeId = projectRevisionDetails.EmployeeId;
-                obj.Hours = splitHours;
+                obj.Hours = (double)splitHours1;
                 obj.AllDay = false;
                 obj.ProjectManagerId = projectRevisionDetails.ProjectManagerId;
                 obj.ProjectDeveloperId = projectRevisionDetails.ProjectDeveloperId;
@@ -600,9 +613,13 @@ namespace Repository.Services
             }
             else
             {
-                var splitHours = (double)(projectRevisionDetails.EndDate-projectRevisionDetails.StartDate).Value.Hours/2;
-               
+                //var splitHours = (double)(projectRevisionDetails.EndDate-projectRevisionDetails.StartDate).Value.Hours/2;
+                var splitHours = (projectRevisionDetails.EndDate - projectRevisionDetails.StartDate).Value.Hours / 2;
+                if((projectRevisionDetails.EndDate - projectRevisionDetails.StartDate).Value.Hours % 2 == 1)
+                    splitHours = (int)((projectRevisionDetails.EndDate - projectRevisionDetails.StartDate).Value.Hours) / 2 + 1;
+                var splitHours1 = (projectRevisionDetails.EndDate - projectRevisionDetails.StartDate).Value.Hours - splitHours;
                 projectRevisionDetails.EndDate = projectRevisionDetails.StartDate.Value.AddHours(splitHours);
+                projectRevisionDetails.Hours = splitHours;
                 projectRevisionDetails.AllDay = false;
                 context.Entry(projectRevisionDetails).State = EntityState.Modified;
                 context.SaveChanges();
@@ -610,8 +627,8 @@ namespace Repository.Services
                 obj.ProjectId = newProject.ProjectId;
                 obj.RevisionNumber = projectRevisionDetails.RevisionNumber;
                 obj.StartDate = projectRevisionDetails.EndDate;
-                obj.EndDate = projectRevisionDetails.EndDate.Value.AddHours(splitHours);
-                obj.Hours = projectRevisionDetails.Hours;
+                obj.EndDate = projectRevisionDetails.EndDate.Value.AddHours(splitHours1);
+                obj.Hours = splitHours1;
                 obj.AllDay = false;
                 obj.EmployeeId = projectRevisionDetails.EmployeeId;
                 obj.ProjectManagerId = projectRevisionDetails.ProjectManagerId;
@@ -793,6 +810,8 @@ namespace Repository.Services
             objrevison.EmployeeId = model.ResourceId;
             objrevison.StartDate = model.StartDate.AddMinutes(model.TimezoneOffset);
             objrevison.EndDate = EndDateTime;
+            objrevison.DateModified = DateTime.Now;
+            objrevison.DateCreated = DateTime.Now;
             context.ProjectRevisions.Add(objrevison);
             context.SaveChanges();
 
@@ -960,6 +979,10 @@ namespace Repository.Services
                 obj.ProjectId = x.Project.ProjectId;
                 obj.ProjectType = x.Project.ProjectType;
                 obj.RevisionId = x.ProjectRevisionId;
+                if (x.ProjectDeveloper != null)
+                    obj.ProjectDeveloperId = x.ProjectDeveloperId;
+                if (x.ProjectManager != null)
+                    obj.ProjectManagerId = x.ProjectManagerId;
                 objMdel.Add(obj);
               }
 

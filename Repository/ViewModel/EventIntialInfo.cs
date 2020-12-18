@@ -44,6 +44,10 @@ namespace Repository.ViewModel
 
         public int ? DepartmentId { get; set; }
 
+        public int? ProjectDeveloperId { get; set; }
+
+        public int? ProjectManagerId { get; set; }
+
         public string? ProjectManagerName { get; set; }
 
         public string? ProjectDeveloperName { get; set; }
