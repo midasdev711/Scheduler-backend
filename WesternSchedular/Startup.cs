@@ -14,6 +14,13 @@ using Repository.Interfaces;
 using Repository.Models;
 using Repository.Services;
 using Microsoft.AspNetCore.Cors;
+// 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using WesternSchedular.Extensions;
+using WesternSchedular.Services;
 
 namespace WesternSchedular
 {
@@ -25,6 +32,8 @@ namespace WesternSchedular
         }
 
         public IConfiguration Configuration { get; }
+        public const string ObjectIdentifierType = "http://schemas.microsoft.com/identity/claims/objectidentifier";
+        public const string TenantIdType = "http://schemas.microsoft.com/identity/claims/tenantid";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,6 +77,36 @@ namespace WesternSchedular
             });*/
             services.AddSwaggerDocument();
 
+            //
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddAzureAd(options => Configuration.Bind("AzureAd", options))
+            .AddCookie();
+
+            // Add application services.
+            services.AddSingleton<IGraphAuthProvider, GraphAuthProvider>();
+            services.AddSingleton<IGraphServiceClientFactory, GraphServiceClientFactory>();
+
+            services.Configure<HstsOptions>(options =>
+            {
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
+
+            services.AddHealthChecks();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +129,19 @@ namespace WesternSchedular
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+            
+            /* 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/healthcheck");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
+            */
         }
     }
 }

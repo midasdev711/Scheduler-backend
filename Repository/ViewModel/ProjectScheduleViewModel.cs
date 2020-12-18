@@ -33,7 +33,7 @@ namespace Repository.ViewModel
 
      public string ZipCode { get; set; }
 
-      public string NickName { get; set; }
+     public string NickName { get; set; }
     
      public int LocationId { get; set; }
 
