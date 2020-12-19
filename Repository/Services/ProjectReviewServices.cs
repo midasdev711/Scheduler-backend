@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Globalization;
 
 namespace Repository.Services
 {
@@ -787,6 +788,12 @@ namespace Repository.Services
                 EndDateTime = newStartDate;
                 do
                 {
+                    DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(EndDateTime);
+                    if (day == DayOfWeek.Saturday || day == DayOfWeek.Sunday)
+                    {
+                        EndDateTime = EndDateTime.AddDays(1);
+                        continue;
+                    }
                     EndDateTime = EndDateTime.AddHours(availableHours);
                     totalHours -= availableHours;
                     if (totalHours > 0)
@@ -847,13 +854,14 @@ namespace Repository.Services
             double projectHours = 0.0;
             double endlimit_start = (endHour - model.StartDate.AddMinutes(model.TimezoneOffset)).TotalHours;
             double start_startlimit = (model.StartDate.AddMinutes(model.TimezoneOffset) - startHour).TotalHours;
-            DateTime newStart = endlimit_start >= 0 ? (start_startlimit >= 0 ? model.StartDate.AddMinutes(model.TimezoneOffset) : startHour) : startHour.AddDays(1);
+            DateTime newStart = endlimit_start > 0 ? (start_startlimit >= 0 ? model.StartDate.AddMinutes(model.TimezoneOffset) : startHour) : startHour.AddDays(1);
 
             DateTime tmpStart = model.StartDate.AddMinutes(model.TimezoneOffset);
             DateTime tmpEnd = model.EndDate.AddMinutes(model.TimezoneOffset);
 
             do
             {
+                
                 endlimit_start = (endHour - tmpStart).TotalHours;
                 start_startlimit = (tmpStart - startHour).TotalHours;
                 double endlimit_end = (endHour - tmpEnd).TotalHours;
@@ -861,12 +869,21 @@ namespace Repository.Services
                 {
                     if (start_startlimit >= 0)
                     {
-                        if (endlimit_end > 0)
+                        if (endlimit_end >= 0)
                         {
                             projectHours += (tmpEnd - tmpStart).TotalHours;
                         } 
                         else
                         {
+                            double tmp = (startHour.AddDays(1) - tmpEnd).TotalHours;
+                            if (tmp > 0)
+                            {
+                                // projectHours += (tmpEnd - tmpStart).TotalHours;
+                            }
+                            else
+                            {
+                                //projectHours += endlimit_start;
+                            }
                             projectHours += endlimit_start;
                         }
                         
@@ -883,8 +900,16 @@ namespace Repository.Services
                         }
                     }
                 }
-                startHour = startHour.AddDays(1);
-                endHour = endHour.AddDays(1);
+                int dateOffset = 1;
+                
+                DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(tmpStart);
+                if (day == DayOfWeek.Friday)
+                {
+                    dateOffset = 3;
+                }
+                
+                startHour = startHour.AddDays(dateOffset);
+                endHour = endHour.AddDays(dateOffset);
                 tmpStart = startHour;
             }
             while (tmpEnd > tmpStart);
@@ -909,7 +934,14 @@ namespace Repository.Services
                     totalHours -= availableHours;
                     if (totalHours > 0)
                     {
-                        EndDateTime = EndDateTime.AddHours(16);
+                        DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(EndDateTime);
+                        if (day == DayOfWeek.Friday)
+                        {
+                            EndDateTime = EndDateTime.AddHours(64);
+                        } else
+                        {
+                            EndDateTime = EndDateTime.AddHours(16);
+                        }
                     }
                     availableHours = totalHours <= 8 ? totalHours : 8;
                 }
